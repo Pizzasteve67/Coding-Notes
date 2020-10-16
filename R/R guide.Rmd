@@ -6,7 +6,7 @@ When you click the **Knit** button a document will be generated that includes bo
 
 ```{r}
 
-# Basic R functions 
+# Basic R Assignments 
 
 # (Shortcut to run chunk Ctrl + Shift + Enter)
 # (Shortcut to run line Ctrl + Enter)
@@ -36,7 +36,7 @@ D
 
 #List Vars
 ls() #shows all defined vars
-rm(A) #removes var A from list of vars
+rm(D) #removes var D from list of vars
 ls()
 #rm(list=ls()) #removes all vars
 
@@ -48,6 +48,7 @@ is.na(z)  #Returns a Boolean vector on which is NA, True for Yes
 ```{r}
 
 #Basic R operations Function (Works on vectors as well)
+
 exp(A)
 1/(A)
 A^3
