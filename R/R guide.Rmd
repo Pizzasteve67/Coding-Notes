@@ -11,7 +11,8 @@ When you click the **Knit** button a document will be generated that includes bo
 # (Shortcut to run chunk Ctrl + Shift + Enter)
 # (Shortcut to run line Ctrl + Enter)
 
-#Assignments (Shortcut is Alt + -)
+#Assignments 
+#(Shortcut is Alt + -)
 A <- 50
 A
 
@@ -55,6 +56,7 @@ A^3
 y <- A+17
 y
 
+#works on vectors as well
 exp(B)
 B*100
 
@@ -78,12 +80,19 @@ pmax(B,C) #parallel max (E.g. compares B[1] with C[1] and returns max)
 C
 sum(C)    #sum all elements in C
 which(C==0)
-C <- C[-11]   #Assign C without the 0 to C
-C    #Print new C
-prod(C)   #multiply all elements in C
-mean(C)   #find the mean of C
-sd(C)   #find standard deviation of C
-summary(C)
+New_C <- C[-11]   #Assign C without the 0 to C
+New_C    #Print new C
+prod(New_C)   #multiply all elements in C
+mean(New_C)   #find the mean of C
+sd(New_C)   #find standard deviation of C
+summary(New_C)
+
+```
+```{r}
+
+
+
+
 
 ```
 
