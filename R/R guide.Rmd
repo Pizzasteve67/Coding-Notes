@@ -4,7 +4,6 @@ This is an R Markdown document.
 -----------------------------------------------------------------------------
 #Basic R Assignments 
 ```{r}
-
 # (Shortcut to run chunk Ctrl + Shift + Enter)
 # (Shortcut to run line Ctrl + Enter)
 
@@ -67,7 +66,7 @@ B
 min(B)    #returns min value in B
 max(B)    #returns max value in B
 which.max(B)    #returns position of max element in B
-B <- c(B,1)   
+B <- c(B,1)   #added a min to test multiple min returns
 B
 which(B==min(B))    #returns all the positions of min element in B
 
@@ -81,8 +80,8 @@ pmax(B,C) #parallel max (E.g. compares B[1] with C[1] and returns max)
 
 C
 sum(C)    #sum all elements in C
-which(C==0)
-New_C <- C[-11]   #Assign C without the 0 to C, minus sign removes element
+which(C==0)  #11
+New_C <- C[-11]   #Assign C without the 11th element to C, minus sign removes element
 New_C    #Print new C
 prod(New_C)   #multiply all elements in C
 mean(New_C)   #find the mean of C
@@ -132,7 +131,8 @@ fct    #See the item as well as levels of factor
 
 levels(fct)  #See the headers/levels for the factors
 
-fct <- factor(fct, levels=c("jap","kor")) #Filter the levels of interest
+#fct <- factor(fct, levels=c("jap","kor")) #Filter the levels of interest
+#fct
 
 summary(fct)  #See the headers/levels and how many items corr to them
               #Similar to pivot table, count items
@@ -187,6 +187,8 @@ R <- matrix(c(3,4,5,6,7,8),nrow=3,byrow=T)
 #fill up matrix sorted by rows
 R
 
+g <- matrix(c(1,2,3,4),c(2,2),byrow = T)  #indicate dimension of matrix with a list
+g
 
 #Matrix can only store 2 dimmensions
 ```
@@ -197,7 +199,7 @@ R
 a <- array(3:8,c(3,2))  #data then dim, 3-8 sorted into 3 rows 2 columns
 a
 
-#class of matrix and array returns "matrix" "array"
+#class of matrix and array returns "matrix" & "array"
 
 z <- 1:50
 dim(z) <- c(5,2,5) #5 rows, 2 columns, 5 tables
@@ -208,7 +210,7 @@ class(z)  #class now only returns "array", matrix can only go max of 2D
 #Matrix Operations
 ```{r}
 diag(10) #diagonalized matrix size 10X10
-diag(c(5,3,2)) #diagonal matrix of 5,3,2, size 3X3
+diag(c(5,3,2)) #diagonal matrix of items 5,3,2, size 3X3
 
 #Create Matrix by binding
 cbind(c(1,2,3),c(4,5,6))  #column bind
@@ -324,7 +326,6 @@ mtcars2
 any(is.na(mtcars2))
 
 #Becareful with na.omit, if another var has too many na and is not needed, remove that var from dataframe first before na.omit
-
 
 
 data(mtcars)
