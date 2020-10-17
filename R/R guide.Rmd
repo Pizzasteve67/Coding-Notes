@@ -44,6 +44,8 @@ ls()
 z <- c(1,NA,2,NA,3,4,5)
 z
 is.na(z)  #Returns a Boolean vector on which is NA, True for Yes
+
+sum(is.na(z))  #Counts how many NAs in z
 ```
 -----------------------------------------------------------------------------
 #Basic R operations Function (Works on vectors as well)
@@ -270,6 +272,12 @@ celg
 celg$names  
 class(celg)
 class(celg$age)  #returns numeric instead of data.frame
+
+table(celg$age==58)   #Check how many people in dataframe is of age 58
+table(celg$age<60)
+
+c=subset(celg,celg$age<40)  #filters out age >40 from the data
+c
 ```
 -----------------------------------------------------------------------------
 #ggplot
@@ -288,6 +296,30 @@ tapply(WHO$LifeExpectancy,WHO$Country,mean)
 
 
 #Actual ggplot2
+
+```
+-----------------------------------------------------------------------------
+#Dealing with NA
+```{r}
+#Detect na
+str(mtcars)
+mtcars[33,] <- c(NA)
+str(mtcars)
+any(is.na(mtcars))  #True there is NA
+sum(is.na(mtcars))  #Count how many NA in data
+
+colSums(is.na(mtcars))  #Column count of how many NA there is in dataset
+mtcars[rowSums(is.na(mtcars))>0,]  #return rows with na 
+
+mtcars1 <- mtcars[-33,]  #removed 33rd row of NA
+mtcars1
+any(is.na(mtcars1))
+
+mtcars2 <- na.omit(mtcars)  #Omit all na, will delete entire row
+mtcars2
+any(is.na(mtcars2))
+
+#Becareful with na.omit, if another var has too many na and is not needed, remove that var from dataframe first before na.omit
 
 ```
 
