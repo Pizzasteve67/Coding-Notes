@@ -308,19 +308,36 @@ str(mtcars)
 any(is.na(mtcars))  #True there is NA
 sum(is.na(mtcars))  #Count how many NA in data
 
+##### V IMPT!!!!!
 colSums(is.na(mtcars))  #Column count of how many NA there is in dataset
 mtcars[rowSums(is.na(mtcars))>0,]  #return rows with na 
+#####
 
 mtcars1 <- mtcars[-33,]  #removed 33rd row of NA
 mtcars1
 any(is.na(mtcars1))
 
+
+#Row delete
 mtcars2 <- na.omit(mtcars)  #Omit all na, will delete entire row
 mtcars2
 any(is.na(mtcars2))
 
 #Becareful with na.omit, if another var has too many na and is not needed, remove that var from dataframe first before na.omit
 
+
+
+data(mtcars)
+dim(mtcars)
+mtcars[33,] <- c(NA)
+mtcars
+
+#Column delete
+NAobject <- colnames(mtcars)[apply(is.na(mtcars),2,any)]  
+#Remove columns with NA value, not removing cars, 2 indicates columns
+
+mtcars1 <- mtcars[,!names(mtcars)%in%NAobject]  
+dim(mtcars1)  #Deleted all columns since I added a row of NA
 ```
 
 
