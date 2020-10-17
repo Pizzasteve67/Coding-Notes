@@ -1,12 +1,9 @@
 ## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
+This is an R Markdown document.
+-----------------------------------------------------------------------------
+#Basic R Assignments 
 ```{r}
-
-# Basic R Assignments 
 
 # (Shortcut to run chunk Ctrl + Shift + Enter)
 # (Shortcut to run line Ctrl + Enter)
@@ -31,6 +28,8 @@ rep(y,3) #Repeats y 3 times, like c(y,y,y)
 rep(y,times=3) #Same as previous
 rep(y,each=3) #Repeats y each element 3 times
 
+x <- rep(100:1,c(100:1)) #Repeats 100 to 1, 100 rep 100 times, 99 rep 99 times....1 rep 1 time
+
 #Sequencing
 D <- c(seq(-10,10,5),"A") #Sequence from -10 to 10 by 5 and add string A
 D
@@ -46,9 +45,9 @@ z <- c(1,NA,2,NA,3,4,5)
 z
 is.na(z)  #Returns a Boolean vector on which is NA, True for Yes
 ```
-```{r}
-
+-----------------------------------------------------------------------------
 #Basic R operations Function (Works on vectors as well)
+```{r}
 
 exp(A)
 1/(A)
@@ -74,25 +73,226 @@ which(B==min(B))    #returns all the positions of min element in B
 max(B,C)
 pmax(B,C) #parallel max (E.g. compares B[1] with C[1] and returns max)
 ```
+-----------------------------------------------------------------------------
+#Vector operation
 ```{r}
 
-#Vector operation
 C
 sum(C)    #sum all elements in C
 which(C==0)
-New_C <- C[-11]   #Assign C without the 0 to C
+New_C <- C[-11]   #Assign C without the 0 to C, minus sign removes element
 New_C    #Print new C
 prod(New_C)   #multiply all elements in C
 mean(New_C)   #find the mean of C
 sd(New_C)   #find standard deviation of C
-summary(New_C)
+summary(New_C) #Quartiles of New_C
 
 ```
 ```{r}
 
+#Classes
 
+#Integer
+z <- 0:9
+z
+class(z)  
 
+#Character
+z1 <- c("a","b")
+z1
+class(z1)  
+w <- as.character(z)  #turns z integers into characters
+w   
 
+#Class conversion
+as.integer(w)   #turns characters back to integer
+
+as.logical(c(5,0))  #Returns True and false, T if !=0, F if ==0
+
+z>1  #Checks if each element is greater than 1, returns boolean
+
+as.numeric(c(z>1))  #Checks if each element is greater than 1, returns 1 & 0, 1 for T, 0 for False
+
+#Multiple class types in a list
+t <- c(2,"a")  #Store an integer and a character
+t   
+class(t)    #Returns Character
 
 ```
+-----------------------------------------------------------------------------
+#Factors
+```{r}
+ct <- c("jap","kor","sin","kor","jap","sin","sin") #Make a list
+class(ct)  #Class is characters
+
+fct <- factor(ct) #Turn the items into factors
+fct    #See the item as well as levels of factor  
+
+levels(fct)  #See the headers/levels for the factors
+
+fct <- factor(fct, levels=c("jap","kor")) #Filter the levels of interest
+
+summary(fct)  #See the headers/levels and how many items corr to them
+              #Similar to pivot table, count items
+
+table(fct)    #Returns same as summary
+
+
+
+#Converting Class of Factors
+X <- factor(c(4,5,6,6,4))
+X <- as.character(X)  #Need to convert to character before numeric
+X
+X <- as.numeric(X)
+X
+
+summary(X)
+```
+-----------------------------------------------------------------------------
+#tapply
+```{r}
+income <- c(500,1000,4000,1244,3400,2000,5000)
+mean(income)
+
+tapply(income,fct,mean)
+#tapply format(data, a list of factors same length),function)
+
+med <- data.frame(patient=1:100, age=rnorm(100, mean=60,sd=12),treatment=gl(4,25,labels=c("treatment","control","new","old")))
+#Creates a dataframe of 100 patients, with age being random normally distributed, with treatment (general label) 4 labels of 25
+
+med
+
+tapply(med$age,med$treatment,mean) 
+#Find mean of age sorted by treatment type
+
+```
+-----------------------------------------------------------------------------
+#Matrix
+```{r}
+r <- matrix(c(3,4,5,6,7,8),nrow=3,byrow=F) 
+#fill up matrix with 3 rows, sort them by column
+
+rownames(r) <- c("A","B","C")  #name rows and col
+colnames(r) <- c("1","2")
+r
+
+r[3,2] #row 3 column 2
+r[5]  #element 5 by columns, counting is done column down
+r[1,]  #r row 1
+r[,2]  #r column 2
+
+R <- matrix(c(3,4,5,6,7,8),nrow=3,byrow=T) 
+#fill up matrix sorted by rows
+R
+
+
+#Matrix can only store 2 dimmensions
+```
+-----------------------------------------------------------------------------
+#Arrays
+```{r}
+#can store more than 2 dimmensions
+a <- array(3:8,c(3,2))  #data then dim, 3-8 sorted into 3 rows 2 columns
+a
+
+#class of matrix and array returns "matrix" "array"
+
+z <- 1:50
+dim(z) <- c(5,2,5) #5 rows, 2 columns, 5 tables
+z
+class(z)  #class now only returns "array", matrix can only go max of 2D
+```
+-----------------------------------------------------------------------------
+#Matrix Operations
+```{r}
+diag(10) #diagonalized matrix size 10X10
+diag(c(5,3,2)) #diagonal matrix of 5,3,2, size 3X3
+
+#Create Matrix by binding
+cbind(c(1,2,3),c(4,5,6))  #column bind
+rbind(c(1,2,3),c(4,5,6))  #row bind
+
+#Matrix Multiplication
+x <- matrix(5:10,c(3,2))
+x
+Y <- matrix(1:6,c(3,2))
+t(Y)  #Transpose Y
+
+x*Y  #Will multiply element by element of each matrix
+x%*%t(Y)  #Actual Matrix multiplication
+
+```
+-----------------------------------------------------------------------------
+#Sol of Linear Eqn
+```{r}
+a <- array(c(2,1,-1,2),c(2,2))
+b <- c(4,4)
+
+a
+b
+
+solve(a,b)
+solve(a)
+
+E <- eigen(a)  #gives eigenvalues of a
+E$values
+E$vectors
+```
+-----------------------------------------------------------------------------
+#list
+```{r}
+#contains ordered collection of objects that can be of different or the same type
+
+c(1,2,"a")
+
+Obama <- list(age=59, sex="M", child.ages=c(22,19))
+Obama
+class(Obama)  #returns list
+
+
+#list of list
+serena <- list(age=39, sex="F",child.ages=3)
+serena
+
+Obama[1]
+
+serena$age
+
+celg <- c(Obama, serena)
+celg
+celg$age  #only returns single item in list, only returned Obama's age
+```
+-----------------------------------------------------------------------------
+#Dataframe ***Very Impt
+```{r}
+celg <- data.frame(names=c("Obama","serena"), age=c(58,39), children=c(2,1))
+celg
+celg$names  
+class(celg)
+class(celg$age)  #returns numeric instead of data.frame
+```
+-----------------------------------------------------------------------------
+#ggplot
+```{r}
+#ggplot2
+library(ggplot2)
+WHO <- read.csv("WHO(1).csv")  #Loads csv
+str(WHO)
+head(WHO)
+
+which(WHO$Country=="Singapore") #Which row is Singapore
+WHO[155,] #look at the 155th row
+summary(WHO$Over60) 
+summary(WHO$Under15)
+tapply(WHO$LifeExpectancy,WHO$Country,mean)
+
+
+#Actual ggplot2
+
+```
+
+
+
+
+
 
