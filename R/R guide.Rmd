@@ -339,6 +339,8 @@ class(celg$age)  #returns numeric instead of data.frame
 
 table(celg$age==58)   #Check how many people in dataframe is of age 58
 table(celg$age<60)
+length(table(celg$age))  #see how many items for age
+table(celg$age)["58"]  #Look at the table values for age is 58
 
 c=subset(celg,celg$age<40)  #filters out age >40 from the data
 c
