@@ -28,10 +28,16 @@ rep(y,times=3) #Same as previous
 rep(y,each=3) #Repeats y each element 3 times
 
 x <- rep(100:1,c(100:1)) #Repeats 100 to 1, 100 rep 100 times, 99 rep 99 times....1 rep 1 time
+x
+
+rep(c(1,2),c(2,4)) #rep 1 twice, and 2 four times
 
 #Sequencing
 D <- c(seq(-10,10,5),"A") #Sequence from -10 to 10 by 5 and add string A
 D
+
+seq(3,30,length=10) #Seq such that length =10
+
 
 #List Vars
 ls() #shows all defined vars
@@ -47,6 +53,51 @@ is.na(z)  #Returns a Boolean vector on which is NA, True for Yes
 sum(is.na(z))  #Counts how many NAs in z
 ```
 -----------------------------------------------------------------------------
+
+#Dealing with NA
+```{r}
+#Detect na
+str(mtcars)
+mtcars[33,] <- c(NA)
+str(mtcars)
+any(is.na(mtcars))  #True there is NA
+sum(is.na(mtcars))  #Count how many NA in data
+
+##### V IMPT!!!!!
+colSums(is.na(mtcars))  #Column marking and count of how many NA there is in dataset
+mtcars[rowSums(is.na(mtcars))>0,]  #return rows with na 
+#####
+
+mtcars1 <- mtcars[-33,]  #removed 33rd row of NA
+mtcars1
+any(is.na(mtcars1))
+
+
+#Row delete
+mtcars2 <- na.omit(mtcars)  #Omit all na, will delete entire row
+mtcars2
+any(is.na(mtcars2))
+
+#Becareful with na.omit, if another var has too many na and is not needed, remove that var from dataframe first before na.omit
+
+
+data(mtcars)
+dim(mtcars)
+mtcars[33,] <- c(NA)
+mtcars
+
+#Column delete
+NAobject <- colnames(mtcars)[apply(is.na(mtcars),2,any)]  
+#Remove columns with NA value, not removing cars, 2 indicates columns
+
+mtcars1 <- mtcars[,!names(mtcars)%in%NAobject]  
+dim(mtcars1)  #Deleted all columns since I added a row of NA
+mtcars1
+
+```
+
+-----------------------------------------------------------------------------
+
 #Basic R operations Function (Works on vectors as well)
 ```{r}
 
@@ -75,6 +126,7 @@ max(B,C)
 pmax(B,C) #parallel max (E.g. compares B[1] with C[1] and returns max)
 ```
 -----------------------------------------------------------------------------
+
 #Vector operation
 ```{r}
 
@@ -121,6 +173,7 @@ class(t)    #Returns Character
 
 ```
 -----------------------------------------------------------------------------
+
 #Factors
 ```{r}
 ct <- c("jap","kor","sin","kor","jap","sin","sin") #Make a list
@@ -151,6 +204,7 @@ X
 summary(X)
 ```
 -----------------------------------------------------------------------------
+
 #tapply
 ```{r}
 income <- c(500,1000,4000,1244,3400,2000,5000)
@@ -158,6 +212,8 @@ mean(income)
 
 tapply(income,fct,mean)
 #tapply format(data, a list of factors same length),function)
+
+#table is a function for 2 set of binary vars, the big overal 0 and 1 represents the list of factors
 
 med <- data.frame(patient=1:100, age=rnorm(100, mean=60,sd=12),treatment=gl(4,25,labels=c("treatment","control","new","old")))
 #Creates a dataframe of 100 patients, with age being random normally distributed, with treatment (general label) 4 labels of 25
@@ -169,6 +225,7 @@ tapply(med$age,med$treatment,mean)
 
 ```
 -----------------------------------------------------------------------------
+
 #Matrix
 ```{r}
 r <- matrix(c(3,4,5,6,7,8),nrow=3,byrow=F) 
@@ -193,6 +250,7 @@ g
 #Matrix can only store 2 dimmensions
 ```
 -----------------------------------------------------------------------------
+
 #Arrays
 ```{r}
 #can store more than 2 dimmensions
@@ -207,6 +265,7 @@ z
 class(z)  #class now only returns "array", matrix can only go max of 2D
 ```
 -----------------------------------------------------------------------------
+
 #Matrix Operations
 ```{r}
 diag(10) #diagonalized matrix size 10X10
@@ -227,6 +286,7 @@ x%*%t(Y)  #Actual Matrix multiplication
 
 ```
 -----------------------------------------------------------------------------
+
 #Sol of Linear Eqn
 ```{r}
 a <- array(c(2,1,-1,2),c(2,2))
@@ -243,6 +303,7 @@ E$values
 E$vectors
 ```
 -----------------------------------------------------------------------------
+
 #list
 ```{r}
 #contains ordered collection of objects that can be of different or the same type
@@ -267,6 +328,7 @@ celg
 celg$age  #only returns single item in list, only returned Obama's age
 ```
 -----------------------------------------------------------------------------
+
 #Dataframe ***Very Impt
 ```{r}
 celg <- data.frame(names=c("Obama","serena"), age=c(58,39), children=c(2,1))
@@ -284,64 +346,92 @@ c
 -----------------------------------------------------------------------------
 #ggplot
 ```{r}
-#ggplot2
 library(ggplot2)
-WHO <- read.csv("WHO(1).csv")  #Loads csv
-str(WHO)
-head(WHO)
-
-which(WHO$Country=="Singapore") #Which row is Singapore
-WHO[155,] #look at the 155th row
-summary(WHO$Over60) 
-summary(WHO$Under15)
-tapply(WHO$LifeExpectancy,WHO$Country,mean)
-
-
-#Actual ggplot2
-
+cars <- mtcars
+str(cars)
+summary(cars)
 ```
------------------------------------------------------------------------------
-#Dealing with NA
+#ggplot bar plot
 ```{r}
-#Detect na
-str(mtcars)
-mtcars[33,] <- c(NA)
-str(mtcars)
-any(is.na(mtcars))  #True there is NA
-sum(is.na(mtcars))  #Count how many NA in data
+bar <- ggplot(cars)+geom_bar(mapping=aes(x=cyl,))+labs(x="cyl",y="Number")
+bar
+```
+#ggplot scatter graph
+```{r}
+pt <- ggplot(cars,aes(x=cyl,y=mpg))+geom_point(na.rm=TRUE)+facet_grid(.~cyl)+ggtitle("cylinder vs mpg")+xlab("cyl")+ylab("mpg")  #facet lets you do multiple plots per cyl in this case
+pt
 
-##### V IMPT!!!!!
-colSums(is.na(mtcars))  #Column count of how many NA there is in dataset
-mtcars[rowSums(is.na(mtcars))>0,]  #return rows with na 
-#####
+pt0 <- ggplot(cars,aes(x=cyl,y=mpg))+geom_point(na.rm=TRUE)+facet_grid(cyl~.)+ggtitle("cylinder vs mpg")+xlab("cyl")+ylab("mpg")  #facet lets you do multiple plots per cyl in this case
+pt0  #vert graphs
 
-mtcars1 <- mtcars[-33,]  #removed 33rd row of NA
-mtcars1
-any(is.na(mtcars1))
+pt1 <- ggplot(cars,aes(x=cyl,y=mpg))+geom_point(na.rm=TRUE)+ggtitle("cylinder vs mpg")+xlab("cyl")+ylab("mpg")  #No facet
+pt1
 
+pt2 <- ggplot(cars,aes(x=cyl,y=mpg))+geom_point(na.rm=TRUE)+facet_wrap(~cyl,nrow=3)+ggtitle("cylinder vs mpg")+xlab("cyl")+ylab("mpg")  #facet wrap into 3 rows
+pt2
+```
+#Geom_histogram
+```{r}
+ggplot(cars,aes(x=cyl))+geom_histogram(binwidth = 1)  #Adjust binwidth
 
-#Row delete
-mtcars2 <- na.omit(mtcars)  #Omit all na, will delete entire row
-mtcars2
-any(is.na(mtcars2))
+ggplot(cars, aes(x = cyl))+geom_histogram(binwidth=(1),center=4,closed=c("left"),color=c("blue"))  #center a bin on 4, outline blue
 
-#Becareful with na.omit, if another var has too many na and is not needed, remove that var from dataframe first before na.omit
+ggplot(cars, aes(x=cyl, fill=as.factor(mpg)))+geom_histogram(binwidth = 1) #Fill with color
 
-
-data(mtcars)
-dim(mtcars)
-mtcars[33,] <- c(NA)
-mtcars
-
-#Column delete
-NAobject <- colnames(mtcars)[apply(is.na(mtcars),2,any)]  
-#Remove columns with NA value, not removing cars, 2 indicates columns
-
-mtcars1 <- mtcars[,!names(mtcars)%in%NAobject]  
-dim(mtcars1)  #Deleted all columns since I added a row of NA
+ggplot(cars, aes(x=cyl, fill=as.factor(mpg)))+geom_histogram(binwidth = 1,position="identity",alpha=0.5) #Prevent stack and add transparency
+#Overlaying doesnt work for more than 2 groups
 ```
 
+#ggplot regression line
+```{r}
+#polynomial fit
+pt <- ggplot(cars,aes(x=cyl,y=mpg))+geom_point(na.rm=TRUE)+geom_smooth(na.rm=TRUE)+ggtitle("Cyl vs MPG")+xlab("cyl")+ylab("mpg")  #Polynomial fit for regression
+pt
+```
+```{r}
+#Linear fit#####
+pt <- ggplot(cars,aes(x=cyl,y=mpg))+geom_point(na.rm=TRUE)+geom_smooth(method="lm",se=F)+ggtitle("Cyl vs MPG")+xlab("cyl")+ylab("mpg") #SE=F no standard error, can put true also
+pt
+```
+#ggplot multiple dimensions with color
+```{r}
+ggplot(cars,aes(x=cyl,y=mpg,color=hp))+geom_point(na.rm=TRUE)+ggtitle("cyl vs mpg vs hp")+xlab("cyl")+ylab("mpg")  #Adds color as a dimension
+```
+#ggplot multiple dimensions with color and size
+```{r}
+ggplot(cars,aes(x=cyl,y=mpg,color=hp,size=wt))+geom_point(na.rm=TRUE)+ggtitle("cyl vs mpg vs hpvs wt")+xlab("cyl")+ylab("mpg")  #Adds color and size as a dimension
+```
+#Adding horizontal and vertical lines in ggplot
+```{r}
+Add horizontal line
++geom_hline(yintercept, linetype, color, size)
 
+Add vertical line
++geom_vline(xintercept, linetype, color, size)
+```
+#Exponential Curve plotting
+```{r}
++geom_smooth(method="glm",se=F,na.rm=T,fullrange=T,method.args = list(family = "binomial"))
+```
+----------------------------------------
+
+###Split training and test data
+```{r}
+library("caTools")
+set.seed(1)
+split <- sample.split(framing1$TENCHD,SplitRatio = 0.65) #Split TENCHD into training and test, 65% in training, 65% true
+split
+training <- subset(framing1, split==T)
+test <- subset(framing1, split==F)
+
+training #Training still returns whole list, so does test
+
+mean(training$TENCHD)
+mean(test$TENCHD)
+
+
+
+```
 
 
 
